@@ -1,0 +1,43 @@
+---
+- hosts: all
+  user: root
+
+  tasks:
+  - name: remove redhat related packages
+    action: yum pkg={{ item }} state=removed
+    with_items:
+      - rhnlib
+      - abrt-plugin-bugzilla
+      - redhat-release-notes*
+      - redhat-indexhtml-* 
+
+  - name: remove redhat release
+    action: shell  rpm -e --nodeps redhat-release-server-6Server
+    #action: shell  rpm -e --nodeps redhat-release-workstation-6Workstation
+    # this must be skipped if packages are not available
+    register: remove_result
+    when: "remove_result.rc != 1"
+
+  - name: download packages
+    action: command curl -O {{ item }}
+    with_items:
+      - http://mirror.centos.org/centos/6/os/x86_64/Packages/yum-plugin-fastestmirror-1.1.30-14.el6.noarch.rpm
+      - http://mirror.centos.org/centos/6/os/x86_64/Packages/yum-3.2.29-40.el6.centos.noarch.rpm
+      - http://mirror.centos.org/centos/6/os/x86_64/Packages/centos-indexhtml-6-1.el6.centos.noarch.rpm
+      - http://mirror.centos.org/centos/6/os/x86_64/Packages/centos-release-6-4.el6.centos.10.x86_64.rpm
+
+  - name: clean yum
+    action: command yum clean all
+
+  - name: remove subscription manager
+    action: yum pkg=subscription-manager state=removed
+
+  - name: remove redhat repo file
+    action: file path=/etc/yum.repo.d/redhat.repo state=absent
+
+  - name: install packages
+    action: command rpm -Uvh *.rpm
+  
+  - name: upgrade
+    action: command yum update -y
+
