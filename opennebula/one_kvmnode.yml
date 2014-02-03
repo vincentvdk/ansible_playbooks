@@ -1,0 +1,4 @@
+- hosts: kvmnodes
+  user: root
+  roles:
+    - one_kvmnode
