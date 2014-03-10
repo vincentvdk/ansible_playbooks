@@ -76,3 +76,5 @@
 - name: create opnssh keys for oneadmin
   action: user name=oneadmin generate_ssh_key=yes ssh_key_bits=2048
 
+- name: set ssh config file for oneadmin
+  action: copy src=config dest=/var/lib/one/.ssh/config owner=oneadmin group=oneadmin mode=0600
