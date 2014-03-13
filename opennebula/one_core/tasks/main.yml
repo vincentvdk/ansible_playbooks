@@ -2,6 +2,9 @@
 - name: Configure OpenNebula repository
   action: copy src="opennebula.repo" dest=/etc/yum.repos.d owner=root group=root
 
+- name: Set SELinux in Permissive mode
+  action: selinux state=permissive
+
 - name: install Opennebula packages
   action: yum name={{ item }} state=installed
   with_items:
