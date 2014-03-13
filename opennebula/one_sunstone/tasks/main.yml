@@ -24,6 +24,10 @@
 - name: install Ruby memcache client
   action: gem name=memcache-client state=present
 
+- name: configure apache for passenger
+  action: template src=passenger.conf.j2 dest=/etc/httpd/conf.d/passenger.conf
+  notify: restart httpd
+
 - name: configure apache for Sunstone
   action: template src=one_sunstone.conf.j2 dest=/etc/httpd/conf.d/one_sunstone.conf
   notify: restart httpd
