@@ -1,6 +1,6 @@
 ---
 - name: Configure OpenNebula repository
-  action: copy src="opennebula.repo" dest=/etc/yum.repos.d owner=root group=root
+  action: copy src="opennebula.repo.{{ one_version }}" dest=/etc/yum.repos.d/opennebula.repo owner=root group=root
 
 - name: Set SELinux in Permissive mode
   action: selinux policy=targeted state=permissive
@@ -10,11 +10,14 @@
   with_items:
     - opennebula-server
     - opennebula-sunstone
-    - opennebula-ozones
     - opennebula-ruby
     - opennebula-java
     - opennebula-gate
     - opennebula-flow
+
+- name: install Opennebula ozones
+  action: yum name=opennebula-ozones state=installed
+  when: one_version == 4.4
 
 - name: install required packages
   action: yum name={{ item }} state=installed
@@ -73,7 +76,7 @@
   action: mysql_user login_user={{ mysql_root_user }} login_password={{ mysql_root_pwd }} name={{ oneadmin_mysql_user }} password={{ oneadmin_mysql_pwd }} priv="opennebula.*:ALL"
 
 - name: deploy oned.conf
-  action: template src="oned.conf.j2" dest=/etc/one/oned.conf owner=root group=oneadmin mode=0640
+  action: template src="oned.conf.{{ one_version }}.j2" dest=/etc/one/oned.conf owner=root group=oneadmin mode=0640
   notify: restart opennebula
 
 - name: create opnssh keys for oneadmin
