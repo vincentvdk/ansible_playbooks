@@ -83,6 +83,12 @@
   when: one_version == 4.6
   notify: restart opennebula
 
+- name: set oneadmin pwd
+  action: template src=one_auth.j2 dest=/var/lib/one/.one/one_auth owner=oneadmin group=oneadmin mode=0600
+  notify: 
+    - restart httpd
+    - restart oned
+
 - name: create opnssh keys for oneadmin
   action: user name=oneadmin generate_ssh_key=yes ssh_key_bits=2048
 
