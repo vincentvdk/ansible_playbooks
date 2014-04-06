@@ -13,10 +13,10 @@
     - memcached
 
 - name: copy passenger repo key
-  action: file src=RPM-GPG-KEY-passenger dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-passenger owner=root group=root mode=644
+  action: copy src=RPM-GPG-KEY-passenger dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-passenger owner=root group=root mode=644
 
 - name: configure passenger repo
-  action: file src=passenger.repo dest=/etc/yum.repos.d/passenger.repo owner=root group=root mode=644
+  action: copy src=passenger.repo dest=/etc/yum.repos.d/passenger.repo owner=root group=root mode=644
 
 - name: install mod_passenger
   action: yum name=mod_passenger state=installed

@@ -1,7 +1,4 @@
 ---
-- name: Configure OpenNebula repository
-  action: copy src="opennebula.repo.{{ one_version }}" dest=/etc/yum.repos.d/opennebula.repo owner=root group=root
-
 - name: Set SELinux in Permissive mode
   action: selinux policy=targeted state=permissive
 
@@ -63,7 +60,7 @@
 - name: set the MySQL root account credentials
   action: mysql_user name=root host={{ item }} password={{ mysql_root_pwd }}
   with_items:
-    - "{{ ansible_hostname }}"
+    - $ansible_hostname 
     - ::1
     - 127.0.0.1
     - localhost
@@ -76,7 +73,14 @@
   action: mysql_user login_user={{ mysql_root_user }} login_password={{ mysql_root_pwd }} name={{ oneadmin_mysql_user }} password={{ oneadmin_mysql_pwd }} priv="opennebula.*:ALL"
 
 - name: deploy oned.conf
+  action: template src="oned.conf.j2" dest=/etc/one/oned.conf owner=root group=oneadmin mode=0640
+  when: one_version != 4.6
+  notify: restart opennebula
+
+
+- name: deploy oned.conf
   action: template src="oned.conf.{{ one_version }}.j2" dest=/etc/one/oned.conf owner=root group=oneadmin mode=0640
+  when: one_version == 4.6
   notify: restart opennebula
 
 - name: create opnssh keys for oneadmin

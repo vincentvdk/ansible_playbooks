@@ -1,7 +1,4 @@
 ---
-- name: enable opennebula repo
-  action: copy src=opennebula.repo.{{ one_version }} dest=/etc/yum.repos.d/opennebula.repo owner=root group=root mode=640
-
 - name: install packages
   action: yum name=opennebula-node-kvm
 
