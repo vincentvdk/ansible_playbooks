@@ -14,7 +14,7 @@
   with_items:
     - id_dsa.pub
     - id_rsa.pub
-  delegate_to: $mgmt_host
+  delegate_to: "{{ mgmt_host }}"
 
 - name: configure ssh authorized keys
   action: authorized_key user=oneadmin key="{{ lookup('file', '/tmp/' + mgmt_host + '/var/lib/one/.ssh/' + item  ) }}"
