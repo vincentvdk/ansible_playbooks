@@ -14,6 +14,9 @@
   with_items:
     - id_dsa.pub
     - id_rsa.pub
+    - config
+    - id_dsa
+    - id_rsa
   delegate_to: $mgmt_host
 
 - name: configure ssh authorized keys
@@ -21,6 +24,15 @@
   with_items:
     - id_dsa.pub
     - id_rsa.pub
+
+- name: copy ssh keys and files to host
+  action: copy src=/tmp/{{ mgmt_host }}/var/lib/one/.ssh/{{ item }} dest=/var/lib/one/.ssh owner=oneadmin group=oneadmin
+  with_items:
+    - id_dsa.pub
+    - id_dsa
+    - id_rsa.pub
+    - id_rsa
+    - config
 
 - name: set SELinux label on authorized_keys
   action: file path=/var/lib/one/.ssh/authorized_keys setype=ssh_home_t
