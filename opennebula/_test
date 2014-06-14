@@ -1,1 +1,5 @@
-192.168.122.211
+[one-mgmt]
+one-1
+
+[kvmnodes]
+one-2 listen_addr=eth1
