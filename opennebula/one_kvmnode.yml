@@ -1,6 +1,5 @@
 - hosts: kvmnodes
   user: root
   roles:
-    - { role: yumrepos, repos: [opennebula], when: "one_version != 4.6"}
-    - { role: yumrepos, repos: [opennebula46], when: "one_version == 4.6"}
+    - { role: yumrepos, repos: [opennebula]}
     - one_kvmnode

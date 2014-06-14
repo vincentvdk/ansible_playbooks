@@ -3,7 +3,6 @@
   user: root
   roles:
     - iptables
-    - { role: yumrepos, repos: [epel, opennebula], when: "one_version != 4.6"}
-    - { role: yumrepos, repos: [epel, opennebula46], when: "one_version == 4.6"}
+    - { role: yumrepos, repos: [epel, opennebula]}
     - one_core
     - one_sunstone
