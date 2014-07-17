@@ -1,0 +1,20 @@
+This playbook deploys link:https://github.com/vincentvdk/jetfire[Jetfire] as wsgi app on Apache.
+
+.current state
+Quick and Dirty
+
+== requirements
+
+- CentOS 6.x (tested on 6.5)
+- EPEL repo already enabled. This is not provided by the playbook yet.
+- libselinux-python package installed
+
+== Configuration
+Following variables must/can be configured in the +group_vars/jetfire.yml+ file.
+
+- +http_jetfire_servername+ : this is the servername used by Apache. By default
+  it is set to "jetfire". If you point the ip address to this you should be able to access the webui by opening a browser and enter http://jetfire.
+
+- +mongo_srv+: MongoDB is installed by default on the machine where you run this
+  playbook against. If you already have a MongoDB instance running that you want to use instead, change this variable to the appropiate hostname and remove the mongodb from the list of to be installed packages.
+
