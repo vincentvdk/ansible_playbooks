@@ -1,0 +1,5 @@
+- hosts: jetfire
+  user: root
+
+  roles:
+    - jetfire

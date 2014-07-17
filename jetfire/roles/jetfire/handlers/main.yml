@@ -1,0 +1,8 @@
+- name: restart apache
+  action: service name=httpd state=restarted
+
+- name: restart iptables
+  action: service name=iptables state=restarted
+
+- name: start mongodb
+  action: service name=mongod state=started

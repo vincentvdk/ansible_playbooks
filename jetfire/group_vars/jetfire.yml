@@ -1,0 +1,2 @@
+mongo_srv: "{{ansible_fqdn}}"
+http_jetfire_servername: jetfire

@@ -1,0 +1,48 @@
+- name: install packages
+  action: yum name={{ item }} state=installed
+  with_items:
+    - mod_wsgi
+    - httpd
+    - git
+    - pymongo
+    - PyYAML
+    - python-pip
+    - libsemanage-python
+
+- name: install Flask libs
+  action: pip name={{ item }} state=present
+  with_items:
+    - Flask
+    - Flask-paginate
+    - Flask-RESTful
+
+- name: install mongodb
+  action: yum name={{item}} state=installed
+  with_items:
+    - mongodb
+    - mongodb-server
+  notify: start mongodb
+
+- name: clone application
+  action: git dest=/var/www/html/jetfire repo=https://github.com/vincentvdk/jetfire.git version=devel
+
+- name: allow apache to connect to network services
+  action: seboolean name=httpd_can_network_connect state=yes persistent=yes
+
+- name: deploy WSGI scriptfile
+  action: template src=jetfire.wsgi dest=/var/www/html/jetfire/jetfire.wsgi owner=apache mode=640
+
+- name: deploy jetfire configuration
+  action: template src=config.cfg.j2 dest=/var/www/html/jetfire/config.cfg owner=apache group=apache mode=640
+  notify: restart apache
+
+#- name: debug
+#  action: debug msg="jetfire vhost servername {{ http_jetfire_servername }}"
+
+- name: deploy virtualhost
+  action: template src=jetfire.vhost dest=/etc/httpd/conf.d/jetfire.conf owner=root mode=640
+  notify: restart apache
+
+- name: deploy iptables
+  action: template src=iptables.j2 dest=/etc/sysconfig/iptables owner=root group=root mode=640
+  notify: restart iptables

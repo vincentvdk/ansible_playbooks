@@ -56,7 +56,7 @@
 - name: set the MySQL root account credentials
   action: mysql_user name=root host={{ item }} password={{ mysql_root_pwd }}
   with_items:
-    - "{{ ansible_hostname }}"
+    - "{{ ansible_fqdn }}"
     - ::1
     - 127.0.0.1
     - localhost
@@ -78,7 +78,7 @@
     - restart httpd
     - restart oned
 
-- name: create opnssh keys for oneadmin
+- name: create openssh keys for oneadmin
   action: user name=oneadmin generate_ssh_key=yes ssh_key_bits=2048
 
 - name: set ssh config file for oneadmin
