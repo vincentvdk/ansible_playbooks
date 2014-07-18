@@ -1,2 +1,2 @@
-mongo_srv: "{{ansible_fqdn}}"
+mongo_srv: 127.0.0.1
 http_jetfire_servername: jetfire
